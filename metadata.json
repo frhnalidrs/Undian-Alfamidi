@@ -1,6 +1,0 @@
-{
-  "name": "Alfamidi Lucky Draw - Undian Doorprize Karyawan",
-  "description": "Sistem undian transparan karyawan PT Midi Utama Indonesia Tbk (Alfamidi) berkapasitas puluhan ribu peserta dengan animasi slot machine, amplop pengumuman, dan ekspor laporan.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
