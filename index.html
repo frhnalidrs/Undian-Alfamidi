@@ -9,13 +9,944 @@
     <meta property="og:description" content="Sistem undian transparan karyawan PT Midi Utama Indonesia Tbk (Alfamidi) berkapasitas puluhan ribu peserta dengan animasi slot machine, amplop pengumuman, dan ekspor laporan." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/index.css" />
   </head>
-  <body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-red-600 selection:text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-red-600 selection:text-white flex flex-col font-sans pb-12">
+
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-red-600/40 px-3 sm:px-6 py-2.5">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+        <!-- Logo & Corporate Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg border border-red-400 flex-shrink-0">
+            A
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-white text-sm sm:text-base tracking-tight uppercase">
+                Alfamidi
+              </span>
+              <span class="text-[10px] text-amber-400 font-bold bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20">
+                LUCKY DRAW
+              </span>
+            </div>
+            <p class="text-[10px] sm:text-xs text-slate-400 truncate max-w-[180px] sm:max-w-none">
+              PT MIDI UTAMA INDONESIA TBK • Sistem Undian Karyawan
+            </p>
+          </div>
+        </div>
+
+        <!-- Navigation Pill Tabs -->
+        <nav class="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800" role="tablist">
+          <button id="tab-btn-stage" class="nav-tab active flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-red-600 text-white shadow-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            <span class="hidden sm:inline">Panggung Undian</span>
+            <span class="sm:hidden">Undian</span>
+          </button>
+          <button id="tab-btn-config" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            <span class="hidden sm:inline">Pengaturan Undian</span>
+            <span class="sm:hidden">Setting</span>
+          </button>
+          <button id="tab-btn-data" class="nav-tab flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7M4 7c0-2 1.5-3 3.5-3h9c2 0 3.5 1 3.5 3M4 7h16m-16 5c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
+            </svg>
+            <span class="hidden sm:inline">Data Peserta</span>
+            <span class="sm:hidden">Data</span>
+          </button>
+        </nav>
+
+        <!-- Right Header Tools -->
+        <div class="flex items-center gap-2">
+          <!-- Button View Last Modal -->
+          <button id="btn-view-last-modal" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer shadow-xs" title="Buka kembali modal hasil undian terakhir">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <span>Modal Terakhir</span>
+          </button>
+
+          <!-- Button History Drawer -->
+          <button id="btn-open-history" class="relative p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors cursor-pointer flex items-center gap-1 text-xs font-medium" title="Lihat Riwayat Putaran Undian">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="hidden md:inline">Riwayat</span>
+            <span id="history-badge-count" class="w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-black hidden items-center justify-center">0</span>
+          </button>
+
+          <!-- Button Streamlit modal -->
+          <button id="btn-open-streamlit" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold" title="Panduan Deploy Streamlit">
+            <span class="font-mono text-amber-400">🐍</span>
+            <span class="hidden sm:inline">Streamlit.py</span>
+          </button>
+
+          <!-- Fullscreen toggle -->
+          <button id="btn-toggle-fullscreen" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors cursor-pointer" title="Layar Penuh">
+            <svg id="fullscreen-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-4">
+
+      <!-- QUICK INFO STRIP -->
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800/80 text-xs">
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="flex items-center gap-1.5 text-slate-300">
+            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V4m0 4h7m-7 0H5m14 0v13a2 2 0 01-2 2H7a2 2 0 01-2-2V8" />
+            </svg>
+            <span>Hadiah Aktif: <strong id="info-active-group" class="text-white">-</strong></span>
+          </div>
+          <span class="text-slate-600 hidden sm:inline">•</span>
+          <div class="text-slate-300">
+            Jumlah: <strong id="info-winner-count" class="text-amber-400 font-mono">1 Pemenang</strong>
+          </div>
+          <span class="text-slate-600 hidden sm:inline">•</span>
+          <div class="text-slate-300">
+            Format: <span id="info-format-preview" class="font-mono text-amber-300">[NAMA_KARYAWAN - NIK - JABATAN]</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">Peserta Memenuhi Syarat:</span>
+          <span id="info-candidate-stats" class="px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-500/30 font-bold font-mono">
+            0 / 0
+          </span>
+        </div>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 1: PANGGUNG UNDIAN (STAGE) -->
+      <!-- ============================================================== -->
+      <section id="section-stage" class="space-y-4">
+        <div class="relative w-full max-w-4xl mx-auto flex items-center justify-center py-2 px-2 sm:px-6">
+          <div class="absolute inset-0 bg-radial from-red-600/20 via-amber-500/10 to-transparent blur-2xl pointer-events-none"></div>
+
+          <!-- Main Slot Machine Chassis -->
+          <div class="relative w-full bg-gradient-to-b from-red-800 via-red-900 to-red-950 p-4 sm:p-7 rounded-3xl border-4 border-amber-400 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] flex flex-col items-center">
+            
+            <!-- Flashing Arcade Bulbs Top Bar -->
+            <div class="w-full flex items-center justify-between px-3 py-1 mb-3 bg-red-950/70 rounded-full border border-amber-500/40">
+              <div id="arcade-bulbs-left" class="flex items-center gap-1.5 sm:gap-2">
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+              </div>
+
+              <!-- Mute / Unmute Button -->
+              <button id="btn-toggle-sound" class="flex items-center gap-1 text-[11px] font-semibold text-amber-300 hover:text-white bg-red-900/60 px-2.5 py-1 rounded-full border border-amber-400/30 transition-colors cursor-pointer" title="Nyalakan/Matikan Suara">
+                <svg id="sound-icon-on" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+                <span id="sound-status-text" class="hidden sm:inline">Suara ON</span>
+              </button>
+
+              <div id="arcade-bulbs-right" class="flex items-center gap-1.5 sm:gap-2">
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400"></span>
+              </div>
+            </div>
+
+            <!-- Marquee Banner Header -->
+            <div class="w-full text-center py-2 px-4 mb-3 rounded-xl bg-gradient-to-r from-amber-600 via-amber-400 to-amber-600 text-slate-950 font-black shadow-lg border-2 border-amber-200">
+              <div class="flex items-center justify-center gap-2">
+                <span class="text-red-700 animate-spin text-sm">✦</span>
+                <h2 id="marquee-event-title" class="text-base sm:text-xl md:text-2xl font-black tracking-wider uppercase font-serif drop-shadow-xs">
+                  DOORPRIZE 20 TAHUN ALFAMIDI
+                </h2>
+                <span class="text-red-700 animate-spin text-sm">✦</span>
+              </div>
+            </div>
+
+            <!-- KATEGORI HADIAH & JUMLAH PEMENANG CONTAINER (Rapi di bawah Kategori Hadiah) -->
+            <div class="w-full mb-4 p-3 sm:p-4 bg-red-950/85 rounded-2xl border border-amber-400/40 shadow-inner space-y-2.5">
+              <!-- Baris 1: Kategori Hadiah Dropdown -->
+              <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V4m0 4h7m-7 0H5m14 0v13a2 2 0 01-2 2H7a2 2 0 01-2-2V8" />
+                  </svg>
+                  <label for="stage-category-select" class="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                    Kategori Hadiah:
+                  </label>
+                </div>
+                <select id="stage-category-select" class="flex-1 w-full bg-slate-900 border border-amber-400/60 rounded-xl px-3 py-2 text-xs sm:text-sm font-bold text-white focus:outline-none focus:border-amber-300 cursor-pointer shadow-inner truncate">
+                  <!-- Populated via JS -->
+                </select>
+              </div>
+
+              <!-- Baris 2: Jumlah Pemenang (Dengan ikon 3 orang/Users, rapi di bawah kategori) -->
+              <div class="pt-2 border-t border-red-900/60 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <!-- Ikon 3 orang (Users) -->
+                  <svg class="w-4 h-4 text-amber-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <span class="text-xs font-bold text-amber-200 uppercase tracking-wider">
+                    Jumlah Pemenang:
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+                  <!-- Quick Count Chips -->
+                  <div class="flex items-center gap-1">
+                    <button type="button" class="btn-quick-count px-2 py-0.5 text-xs font-bold rounded-lg transition-colors cursor-pointer bg-red-900/80 text-amber-200/80 hover:bg-red-800 hover:text-white" data-count="1">1</button>
+                    <button type="button" class="btn-quick-count px-2 py-0.5 text-xs font-bold rounded-lg transition-colors cursor-pointer bg-red-900/80 text-amber-200/80 hover:bg-red-800 hover:text-white" data-count="3">3</button>
+                    <button type="button" class="btn-quick-count px-2 py-0.5 text-xs font-bold rounded-lg transition-colors cursor-pointer bg-red-900/80 text-amber-200/80 hover:bg-red-800 hover:text-white" data-count="5">5</button>
+                    <button type="button" class="btn-quick-count px-2 py-0.5 text-xs font-bold rounded-lg transition-colors cursor-pointer bg-red-900/80 text-amber-200/80 hover:bg-red-800 hover:text-white" data-count="10">10</button>
+                    <button type="button" class="btn-quick-count px-2 py-0.5 text-xs font-bold rounded-lg transition-colors cursor-pointer bg-red-900/80 text-amber-200/80 hover:bg-red-800 hover:text-white" data-count="20">20</button>
+                  </div>
+
+                  <!-- Number Input -->
+                  <div class="flex items-center gap-1 bg-slate-900 px-2 py-1 rounded-lg border border-amber-400/50">
+                    <input id="stage-winner-count-input" type="number" min="1" value="1" class="w-12 sm:w-16 bg-transparent text-xs sm:text-sm text-amber-300 font-mono font-black text-center focus:outline-none" />
+                    <span class="text-[11px] text-slate-400 font-semibold">Orang</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot Reels Container & Arcade Big Red Button Row -->
+            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+              <!-- Glass Reels Box -->
+              <div class="flex-1 w-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 sm:p-5 rounded-2xl border-4 border-amber-500/80 shadow-[inset_0_10px_25px_rgba(0,0,0,0.8)] relative overflow-hidden">
+                <!-- Gloss Reflection Overlay -->
+                <div class="absolute top-0 inset-x-0 h-1/3 bg-gradient-to-b from-white/15 to-transparent pointer-events-none rounded-t-xl"></div>
+
+                <!-- Center target indicator line -->
+                <div class="absolute inset-y-0 left-0 right-0 my-auto h-20 sm:h-24 border-y-2 border-amber-400/40 bg-amber-400/5 pointer-events-none z-10 flex items-center justify-between px-1">
+                  <span class="text-amber-400 text-xs font-black">▶</span>
+                  <span class="text-amber-400 text-xs font-black">◀</span>
+                </div>
+
+                <!-- Reels Grid -->
+                <div id="slot-reels-grid" class="grid gap-3 sm:gap-4 relative z-0 grid-cols-1">
+                  <!-- Dynamic Reels Rendered by JS -->
+                </div>
+              </div>
+
+              <!-- ARCADE BIG RED BUTTON (Pengganti Tuas) -->
+              <div class="flex flex-col items-center justify-center flex-shrink-0 select-none py-1">
+                <div class="relative group">
+                  <!-- Outer Golden Arcade Bezel Ring -->
+                  <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full p-2 bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 shadow-[0_12px_28px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.6)] flex items-center justify-center">
+                    <!-- Inner Metallic Bezel Ring -->
+                    <div class="w-full h-full rounded-full p-2 bg-gradient-to-b from-slate-800 via-slate-900 to-black shadow-inner flex items-center justify-center">
+                      <!-- Big 3D Red Push Button -->
+                      <button id="btn-arcade-red-button" type="button" class="w-full h-full rounded-full cursor-pointer transition-all duration-150 flex flex-col items-center justify-center text-center relative overflow-hidden outline-none arcade-red-button" title="Tekan Tombol Merah untuk Mengundi!">
+                        <div class="absolute top-1 inset-x-3 h-1/3 bg-gradient-to-b from-white/50 to-transparent rounded-full pointer-events-none"></div>
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-md mb-0.5 fill-white" viewBox="0 0 24 24">
+                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        <span id="btn-arcade-red-text" class="text-[11px] sm:text-xs font-black tracking-wider uppercase text-white drop-shadow-md font-mono leading-none">
+                          TEKAN
+                        </span>
+                        <span class="text-[9px] font-bold text-amber-200 tracking-widest uppercase leading-none mt-0.5">
+                          UNDI
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="arcade-button-glow" class="absolute inset-0 rounded-full border-2 border-red-500/40 animate-ping pointer-events-none"></div>
+                </div>
+                <span class="text-[11px] font-black text-amber-300 uppercase tracking-widest mt-2">
+                  TOMBOL UNDI
+                </span>
+              </div>
+            </div>
+
+            <!-- Bottom Control Bar -->
+            <div class="w-full mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-red-700/60">
+              <div class="flex items-center gap-2 text-xs text-red-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Total Kandidat: <strong id="bottom-total-candidates" class="text-white font-mono">0</strong> peserta</span>
+              </div>
+
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <!-- Re-open Last Modal Button -->
+                <button id="btn-bottom-last-modal" class="hidden px-3 py-2 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white text-xs font-bold rounded-xl border border-amber-400/40 flex items-center gap-1.5 transition-all cursor-pointer shadow-md hover:scale-105" title="Buka kembali modal hasil undian terakhir">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <span id="btn-bottom-last-modal-text">Lihat Modal Terakhir</span>
+                </button>
+
+                <!-- Undi Ulang Button -->
+                <button id="btn-reset-draw" class="hidden px-3 py-2 bg-red-950/80 hover:bg-red-900 text-amber-300 text-xs font-semibold rounded-xl border border-amber-400/40 flex items-center gap-1.5 transition-colors cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span>Undi Ulang</span>
+                </button>
+
+                <!-- Big Action Spin Button -->
+                <button id="btn-main-spin" class="px-6 sm:px-9 py-2.5 sm:py-3 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-xl bg-gradient-to-r from-red-600 via-red-500 to-amber-500 hover:from-red-500 hover:to-amber-400 text-white border-2 border-amber-300 hover:scale-105 active:scale-95 shadow-[0_0_25px_rgba(239,68,68,0.6)]">
+                  PUTAR UNDIAN SEKARANG
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 2: PENGATURAN PARAMETER UNDIAN (CONFIG) -->
+      <!-- ============================================================== -->
+      <section id="section-config" class="hidden max-w-4xl mx-auto space-y-5">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              Pengaturan Parameter Undian
+            </h2>
+            <span class="text-xs text-slate-400">
+              Tersedia: <strong id="config-available-count" class="text-white">0</strong> peserta
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <!-- Left Column -->
+            <div class="space-y-4">
+              <!-- Event Title Input -->
+              <div>
+                <label for="input-event-title" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Judul Acara / Header Undian
+                </label>
+                <input id="input-event-title" type="text" value="DOORPRIZE 18 TAHUN ALFAMIDI" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500" />
+              </div>
+
+              <!-- BULK Kategori / Grup Hadiah Management -->
+              <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                  <label for="textarea-bulk-categories" class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Daftar Kategori / Grup Hadiah (Bulk)
+                  </label>
+                  <span id="config-categories-count" class="text-[10px] text-slate-400 font-mono">0 Kategori Aktif</span>
+                </div>
+
+                <p class="text-[11px] text-slate-400">
+                  Ketik banyak kategori sekaligus (1 baris per kategori). Format: <span class="text-amber-300">Nama Hadiah | Jumlah Pemenang</span>
+                </p>
+
+                <textarea id="textarea-bulk-categories" rows="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-red-500"></textarea>
+
+                <div class="flex items-center justify-between pt-1">
+                  <span class="text-[10px] text-slate-400 italic">
+                    * Pemilihan kategori undian dilakukan di Panggung Undian
+                  </span>
+                  <button id="btn-apply-bulk-categories" type="button" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm">
+                    Terapkan Kategori
+                  </button>
+                </div>
+
+                <!-- Configured Categories Chip List -->
+                <div id="config-categories-chips" class="pt-2 border-t border-slate-800 space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+
+              <!-- Name Column Selector -->
+              <div>
+                <label for="select-name-column" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Kolom Utama / Nama yang Diundi
+                </label>
+                <select id="select-name-column" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500 cursor-pointer">
+                  <!-- Rendered via JS -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-4">
+              <!-- Default Winner Count & Concise Animation Badge -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="input-default-winner-count" class="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                    Jumlah Pemenang Default
+                  </label>
+                  <span id="label-default-winner-count" class="text-xs font-mono font-bold text-amber-400">1 Orang</span>
+                </div>
+
+                <div class="flex items-center gap-2 mb-2.5">
+                  <input id="input-default-winner-count" type="number" min="1" value="1" class="w-24 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-mono text-center focus:outline-none focus:border-red-500" />
+                  <div class="flex flex-wrap gap-1">
+                    <button type="button" class="btn-config-quick-count px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-count="1">1</button>
+                    <button type="button" class="btn-config-quick-count px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-count="3">3</button>
+                    <button type="button" class="btn-config-quick-count px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-count="5">5</button>
+                    <button type="button" class="btn-config-quick-count px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-count="10">10</button>
+                    <button type="button" class="btn-config-quick-count px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-count="20">20</button>
+                  </div>
+                </div>
+
+                <!-- Concise Animation Notice Badge (Ringkas sesuai instruksi) -->
+                <div id="animation-notice-badge" class="p-2.5 rounded-xl border flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-950/60 border-amber-500/40">
+                  <span id="animation-notice-text">🎰 Slot Machine</span>
+                </div>
+              </div>
+
+              <!-- Weighted Probability Configuration -->
+              <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span class="text-xs font-bold text-white uppercase tracking-wider">
+                      Bobot Persentase Kemenangan
+                    </span>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input id="checkbox-use-weighting" type="checkbox" class="sr-only peer" />
+                    <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mb-3">
+                  Makin besar poin/skor kandidat, makin tinggi peluang menang (Weighted Random Sampling).
+                </p>
+
+                <div id="weight-column-container" class="hidden space-y-2 pt-2 border-t border-slate-800">
+                  <label for="select-weight-column" class="block text-[11px] font-bold text-amber-300 uppercase">
+                    Pilih Kolom Penentu Bobot / Poin:
+                  </label>
+                  <select id="select-weight-column" class="w-full bg-slate-900 border border-amber-500/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer">
+                    <!-- Rendered via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Display Columns Config -->
+              <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Kolom Ditampilkan Selain Nama
+                  </label>
+                  <span id="config-display-selected-count" class="text-[10px] text-slate-400 font-mono">0 terpilih</span>
+                </div>
+
+                <div id="config-display-checkboxes-grid" class="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto pr-1">
+                  <!-- Rendered via JS -->
+                </div>
+
+                <div class="pt-2 border-t border-slate-800">
+                  <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Contoh Format Keluaran:</span>
+                  <div id="config-format-sample-box" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 font-mono text-xs text-amber-300 font-bold truncate">
+                    NAMA_KARYAWAN - JABATAN - CABANG
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duplicate Winner Prevention Option -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/50 border border-slate-800">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  <div>
+                    <span class="text-xs font-bold text-white block">Kunci Pemenang (Cegah Menang 2x)</span>
+                    <span class="text-[10px] text-slate-400">Karyawan yang sudah menang otomatis tidak diundi lagi di putaran berikutnya.</span>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input id="checkbox-prevent-duplicate" type="checkbox" checked class="sr-only peer" />
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-3 border-t border-slate-800">
+            <button id="btn-save-to-stage" type="button" class="px-6 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Simpan & Menuju Panggung Undian
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SECTION 3: SUMBER DATA PESERTA (DATA IMPORT) -->
+      <!-- ============================================================== -->
+      <section id="section-data" class="hidden max-w-4xl mx-auto space-y-5">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5 border-b border-slate-800 pb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7M4 7c0-2 1.5-3 3.5-3h9c2 0 3.5 1 3.5 3M4 7h16m-16 5c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
+                </svg>
+                Sumber Data Peserta Undian
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Dukung puluhan ribu entri via Google Spreadsheet, file Excel, CSV, atau ketik manual.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-600/40 text-emerald-400 text-xs font-semibold">
+              <span id="data-active-counter-text">0 Peserta Aktif</span>
+            </div>
+          </div>
+
+          <!-- Data Import Sub-Tabs -->
+          <div class="flex flex-wrap gap-1.5 p-1 bg-slate-950/80 rounded-xl mb-5 border border-slate-800">
+            <button class="subtab-btn active px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-red-600 text-white shadow-md" data-target="panel-sample">
+              Sampel Alfamidi
+            </button>
+            <button class="subtab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800" data-target="panel-excel">
+              Upload Excel (.xlsx)
+            </button>
+            <button class="subtab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800" data-target="panel-csv">
+              Upload CSV
+            </button>
+            <button class="subtab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800" data-target="panel-gsheet">
+              Google Spreadsheet
+            </button>
+            <button class="subtab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-400 hover:text-white hover:bg-slate-800" data-target="panel-manual">
+              Ketik Manual
+            </button>
+          </div>
+
+          <!-- Sub-Panels -->
+          <div class="space-y-4">
+            <!-- Sample Alfamidi Panel -->
+            <div id="panel-sample" class="data-subpanel bg-slate-950/60 p-4 sm:p-5 rounded-xl border border-slate-800/80">
+              <h3 class="text-sm font-bold text-white mb-1">Data Demo Karyawan Alfamidi (Siap Pakai)</h3>
+              <p class="text-xs text-slate-400 mb-4">
+                Gunakan data simulasi resmi lengkap dengan NIK, Nama Karyawan, Jabatan, Cabang se-Indonesia, dan Poin Kinerja.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <button type="button" id="btn-load-sample-1k" class="px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md">
+                  Muat 1.000 Karyawan Alfamidi
+                </button>
+                <button type="button" id="btn-load-sample-10k" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold rounded-xl border border-amber-500/30 transition-all cursor-pointer shadow-sm">
+                  Muat 10.000 Karyawan (Skala Menengah)
+                </button>
+                <button type="button" id="btn-load-sample-25k" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs font-bold rounded-xl border border-emerald-500/30 transition-all cursor-pointer shadow-sm">
+                  Muat 25.000 Karyawan (Skala Akbar)
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Excel Panel -->
+            <div id="panel-excel" class="data-subpanel hidden border-2 border-dashed border-slate-700 hover:border-red-500/80 rounded-xl p-6 text-center transition-colors bg-slate-950/40">
+              <p class="text-sm font-bold text-white mb-1">Pilih File Excel (.xlsx, .xls)</p>
+              <p class="text-xs text-slate-400 mb-4">Kolom baris pertama akan otomatis dideteksi sebagai judul kolom.</p>
+              <label class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-sm">
+                <span>Pilih Berkas Excel</span>
+                <input id="input-file-excel" type="file" accept=".xlsx, .xls" class="hidden" />
+              </label>
+            </div>
+
+            <!-- Upload CSV Panel -->
+            <div id="panel-csv" class="data-subpanel hidden border-2 border-dashed border-slate-700 hover:border-red-500/80 rounded-xl p-6 text-center transition-colors bg-slate-950/40">
+              <p class="text-sm font-bold text-white mb-1">Pilih File CSV (.csv)</p>
+              <p class="text-xs text-slate-400 mb-4">Mendukung pemisah koma (,), titik koma (;), atau tab (\t).</p>
+              <label class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-sm">
+                <span>Pilih Berkas CSV</span>
+                <input id="input-file-csv" type="file" accept=".csv, text/csv" class="hidden" />
+              </label>
+            </div>
+
+            <!-- Google Spreadsheet Panel -->
+            <div id="panel-gsheet" class="data-subpanel hidden bg-slate-950/60 p-4 sm:p-5 rounded-xl border border-slate-800/80 space-y-3">
+              <div>
+                <label for="input-gsheet-url" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                  Tautan Google Spreadsheet
+                </label>
+                <div class="flex gap-2">
+                  <input id="input-gsheet-url" type="url" placeholder="https://docs.google.com/spreadsheets/d/.../edit" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-red-500" />
+                  <button id="btn-fetch-gsheet" type="button" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm">
+                    Tarik Data
+                  </button>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                💡 Pastikan akses diatur ke <span class="text-amber-300">"Anyone with the link can view"</span> agar dapat ditarik langsung.
+              </p>
+            </div>
+
+            <!-- Manual Input Panel -->
+            <div id="panel-manual" class="data-subpanel hidden bg-slate-950/60 p-4 sm:p-5 rounded-xl border border-slate-800/80 space-y-3">
+              <div>
+                <label for="textarea-manual-data" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                  Ketik atau Tempel Data Manual
+                </label>
+                <p class="text-[11px] text-slate-400 mb-2">
+                  Format: koma (,) untuk memisahkan kolom, dan ENTER untuk baris baru. Baris 1 = Judul kolom.
+                </p>
+                <textarea id="textarea-manual-data" rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-red-500">NIK,NAMA_KARYAWAN,JABATAN,CABANG,POIN_UNDIAN
+MIDI-202401,Budi Santoso,Store Leader,Makassar,150
+MIDI-202402,Siti Nurhaliza,Cashier Staff,Bekasi,90
+MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120
+MIDI-202404,Dewi Lestari,Assistant Store Leader,Medan,110
+MIDI-202405,Eko Wijaya,Store Crew,Manado,85</textarea>
+              </div>
+              <div class="flex justify-end">
+                <button id="btn-apply-manual-data" type="button" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm">
+                  Terapkan Data Manual
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Alert -->
+            <div id="data-import-alert" class="hidden p-3 rounded-xl text-xs"></div>
+
+            <!-- Preview Table of First 5 Rows -->
+            <div id="data-preview-container" class="mt-4 pt-4 border-t border-slate-800">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-300">Pratinjau Data Masuk (5 Baris Pertama):</span>
+                <span id="data-columns-detected-text" class="text-[11px] text-slate-400">0 Kolom Terdeteksi</span>
+              </div>
+              <div class="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950/80">
+                <table class="w-full text-left text-xs border-collapse">
+                  <thead id="data-preview-thead" class="bg-slate-800 text-slate-300 font-semibold border-b border-slate-700"></thead>
+                  <tbody id="data-preview-tbody" class="divide-y divide-slate-800/60"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 1: SURAT AMPLOP VINTAGE RESMI (amplop.png) [4-10 PEMENANG] -->
+    <!-- ============================================================== -->
+    <div id="modal-envelope" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-slate-950/85 backdrop-blur-md">
+      <div class="relative w-full max-w-3xl flex flex-col items-center my-auto">
+        <!-- Close Button -->
+        <button id="btn-close-envelope-modal" class="absolute -top-12 right-0 sm:right-2 z-30 p-2 text-white/80 hover:text-white bg-slate-900/80 hover:bg-slate-800 rounded-full border border-white/20 transition-all cursor-pointer shadow-lg" title="Tutup">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <div class="relative w-full flex flex-col items-center">
+          <!-- THE LETTER (Surat Keputusan Pemenang) -->
+          <div id="envelope-letter" class="w-full max-w-2xl bg-[#fffef9] text-slate-800 rounded-xl shadow-2xl border border-amber-200/80 p-5 sm:p-8 z-20 transition-all duration-700 ease-out transform translate-y-0 opacity-100">
+            <!-- Corporate Letterhead -->
+            <div class="flex items-center justify-between border-b-2 border-red-600 pb-4 mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-red-600 flex items-center justify-center text-white font-black text-xl shadow-md">
+                  A
+                </div>
+                <div>
+                  <h3 class="font-extrabold text-sm sm:text-base tracking-wide text-slate-900 uppercase">
+                    PT MIDI UTAMA INDONESIA TBK
+                  </h3>
+                  <p class="text-[11px] sm:text-xs text-slate-500 font-medium">
+                    Surat Keputusan Pemenang Undian Resmi
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span id="letter-category-name" class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-red-600 block">Hadiah Utama</span>
+                <span id="letter-current-date" class="text-[10px] text-slate-400">1 Oktober 2026</span>
+              </div>
+            </div>
+
+            <!-- Title & Notice -->
+            <div class="text-center mb-5">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-2">
+                Daftar Pemenang Terpilih
+              </div>
+              <h2 id="letter-event-title" class="text-xl sm:text-2xl font-black text-red-700 tracking-tight font-serif uppercase">
+                DOORPRIZE 18 TAHUN ALFAMIDI
+              </h2>
+              <p id="letter-subtitle" class="text-xs text-slate-600 mt-1">
+                Selamat kepada rekan karyawan Alfamidi berikut yang beruntung:
+              </p>
+            </div>
+
+            <!-- Winner List Scroll Area -->
+            <div id="envelope-winners-list" class="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Verification Footer Note -->
+            <div class="mt-5 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+              <span class="italic">Sah & Terverifikasi oleh Sistem Pengundian Terbuka Alfamidi</span>
+              <span id="letter-total-winners-count" class="font-mono text-[11px] text-slate-400">TOTAL: 0 PEMENANG</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-5 flex flex-wrap items-center justify-end gap-2.5">
+              <button id="btn-envelope-export-excel" class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Unduh Excel
+              </button>
+              <button id="btn-envelope-export-pdf" class="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Cetak PDF
+              </button>
+              <button id="btn-envelope-finish" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold transition-colors cursor-pointer">
+                Selesai
+              </button>
+            </div>
+          </div>
+
+          <!-- THE VINTAGE AIRMAIL ENVELOPE (AMPLOP SESUAI amplop.png) -->
+          <div id="envelope-chassis" class="w-full max-w-xl aspect-[1.65/1] rounded-lg shadow-2xl relative overflow-hidden transition-all duration-700 ease-out translate-y-12 sm:translate-y-16 scale-90 sm:scale-95 opacity-90" style="background-color: #f5efe4; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);">
+            <div class="absolute inset-0 pointer-events-none p-2 sm:p-3 airmail-border">
+              <div class="w-full h-full bg-[#fbf7f0] rounded-sm relative p-4 sm:p-7 flex flex-col justify-between overflow-hidden shadow-inner">
+                <!-- Top Section: PT MIDI UTAMA INDONESIA TBK + Vintage Postage Stamp -->
+                <div class="relative z-10 flex items-start justify-between">
+                  <div class="max-w-[65%] sm:max-w-[70%]">
+                    <h4 class="font-serif font-black text-xs sm:text-base text-slate-800 tracking-wider uppercase leading-tight">
+                      PT MIDI UTAMA INDONESIA TBK
+                    </h4>
+                    <p class="text-[9px] sm:text-[11px] text-slate-600 font-serif leading-tight mt-1">
+                      Alfa Tower Alam Sutera, Jl. Jalur Sutera Bar. No.Kav. 7-9,<br>
+                      Kota Tangerang, Banten, Indonesia, 15143
+                    </p>
+                  </div>
+
+                  <!-- Postage Stamp -->
+                  <div class="relative flex-shrink-0">
+                    <div class="w-16 h-20 sm:w-20 sm:h-24 bg-[#a35e38] p-1.5 rounded-sm shadow-md flex items-center justify-center stamp-border">
+                      <div class="w-full h-full bg-white border border-amber-900/30 rounded-xs flex flex-col items-center justify-center p-1">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-xl sm:text-2xl shadow-xs">
+                          A
+                        </div>
+                        <span class="text-[10px] sm:text-[11px] font-black text-red-600 tracking-tighter mt-1">Alfamidi</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Center Section: "TO: THE WINNER OF..." -->
+                <div class="relative z-10 my-auto pl-4 sm:pl-8 py-2">
+                  <div class="text-xs sm:text-sm font-serif font-black text-red-800 tracking-wider">
+                    TO : THE WINNER OF
+                  </div>
+                  <div id="envelope-body-event-title" class="text-base sm:text-2xl md:text-3xl font-serif font-black text-red-700 uppercase tracking-tight leading-tight mt-0.5">
+                    DOORPRIZE 18 TAHUN ALFAMIDI
+                  </div>
+                  <div id="envelope-body-subtitle" class="text-[10px] sm:text-xs font-semibold text-slate-600 mt-1 uppercase tracking-wider">
+                    HADIAH UTAMA • PEMENANG RESMI
+                  </div>
+                </div>
+
+                <!-- Bottom decorative stamps -->
+                <div class="relative z-10 flex justify-between items-end text-[9px] text-slate-400 font-mono">
+                  <span>AIR MAIL / PAR AVION</span>
+                  <span>CONFIDENTIAL & OFFICIAL</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 2: TABEL PEMENANG KOMPREHENSIF [>10 PEMENANG] -->
+    <!-- ============================================================== -->
+    <div id="modal-table" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md overflow-hidden">
+      <div class="relative w-full max-w-5xl h-[92vh] flex flex-col bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Header Banner -->
+        <div class="flex-shrink-0 bg-gradient-to-r from-red-700 via-red-600 to-red-800 p-4 sm:p-5 text-white flex items-center justify-between shadow-md">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-amber-300 shadow-inner">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold uppercase tracking-widest text-amber-300">HASIL RESMI UNDIAN BESAR</span>
+                <span class="text-white/40">·</span>
+                <span id="table-modal-winner-count-badge" class="text-[11px] font-bold text-white/90">0 PEMENANG</span>
+              </div>
+              <h2 id="table-modal-event-title" class="text-lg sm:text-2xl font-black tracking-tight text-white uppercase">
+                DOORPRIZE 18 TAHUN ALFAMIDI
+              </h2>
+              <p class="text-xs text-red-100 font-medium mt-0.5">
+                Kategori: <strong id="table-modal-category-name" class="text-white">-</strong>
+              </p>
+            </div>
+          </div>
+          <button id="btn-close-table-modal" class="p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors cursor-pointer" title="Tutup">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Action Toolbar & Search -->
+        <div class="flex-shrink-0 p-3 sm:p-4 bg-slate-800/80 border-b border-slate-700 flex flex-wrap items-center justify-between gap-3">
+          <div class="relative flex-1 min-w-[220px] max-w-md">
+            <input id="input-search-table-modal" type="text" placeholder="Cari pemenang, NIK, jabatan, cabang..." class="w-full pl-3 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="btn-table-copy-list" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer">
+              <span>Salin Teks</span>
+            </button>
+            <button id="btn-table-export-excel" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+              <span>Unduh Excel</span>
+            </button>
+            <button id="btn-table-export-pdf" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+              <span>Cetak PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="flex-1 overflow-y-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead id="table-modal-thead" class="sticky top-0 z-10 bg-slate-800 text-slate-300 text-xs uppercase tracking-wider font-semibold border-b border-slate-700 shadow-xs"></thead>
+            <tbody id="table-modal-tbody" class="divide-y divide-slate-800/80"></tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer Pagination -->
+        <div class="flex-shrink-0 p-3 sm:p-4 bg-slate-800/90 border-t border-slate-700 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+          <div id="table-modal-pagination-info">Menampilkan 0 - 0 dari 0 pemenang</div>
+          <div class="flex items-center gap-2">
+            <button id="btn-table-prev-page" class="p-1.5 rounded bg-slate-700 text-slate-200 hover:bg-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors">◀</button>
+            <span id="table-modal-page-num" class="text-slate-200 font-semibold px-2">Halaman 1 / 1</span>
+            <button id="btn-table-next-page" class="p-1.5 rounded bg-slate-700 text-slate-200 hover:bg-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors">▶</button>
+            <button id="btn-table-bottom-close" class="ml-3 px-4 py-1.5 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors cursor-pointer">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- DRAWER 3: RIWAYAT PUTARAN UNDIAN (HISTORY) -->
+    <!-- ============================================================== -->
+    <div id="drawer-history" class="hidden fixed inset-0 z-50 flex items-center justify-end bg-slate-950/70 backdrop-blur-xs">
+      <div class="w-full max-w-lg h-full bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col">
+        <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-lg bg-red-600/20 text-red-500 flex items-center justify-center font-bold">
+              🕒
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-white">Riwayat Undian</h3>
+              <p id="drawer-history-stats" class="text-xs text-slate-400">0 Putaran Selesai</p>
+            </div>
+          </div>
+          <button id="btn-close-history-drawer" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div id="drawer-history-global-actions" class="hidden p-3 bg-slate-950/50 border-b border-slate-800 flex items-center justify-between gap-2">
+          <span class="text-xs text-slate-400 font-medium">Ekspor Gabungan:</span>
+          <div class="flex items-center gap-2">
+            <button id="btn-history-export-all-excel" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
+              Semua Excel
+            </button>
+            <button id="btn-history-export-all-pdf" class="px-2.5 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-red-300 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
+              Semua PDF
+            </button>
+          </div>
+        </div>
+
+        <div id="drawer-history-list" class="flex-1 overflow-y-auto p-4 space-y-4">
+          <!-- Rendered via JS -->
+        </div>
+
+        <div class="p-3.5 border-t border-slate-800 bg-slate-950/70 flex items-center justify-between">
+          <button id="btn-history-reset-all" class="text-xs text-red-400 hover:text-red-300 flex items-center gap-1.5 cursor-pointer">
+            Reset Riwayat
+          </button>
+          <button id="btn-history-bottom-close" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 4: STREAMLIT DEPLOYMENT HELPER (streamlit.py) -->
+    <!-- ============================================================== -->
+    <div id="modal-streamlit" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md">
+      <div class="relative w-full max-w-2xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-5 sm:p-6 text-slate-100 flex flex-col space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 flex items-center justify-center font-bold text-lg">
+              🐍
+            </div>
+            <div>
+              <h3 class="font-extrabold text-base text-white">Streamlit Deployment (streamlit.py)</h3>
+              <p class="text-xs text-slate-400">File <code class="text-amber-400">streamlit.py</code> dan <code class="text-amber-400">requirements.txt</code> siap digunakan</p>
+            </div>
+          </div>
+          <button id="btn-close-streamlit-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs text-slate-300">
+          <p>
+            Program undian telah dibuat dalam versi <strong>Python Streamlit</strong> (<code class="text-amber-300">streamlit.py</code>) dengan seluruh fungsionalitas:
+          </p>
+          <ul class="list-disc pl-5 space-y-1 text-slate-400">
+            <li>Input puluhan ribu data dari Google Spreadsheet publik, Excel, CSV, teks manual, dan generator sampel.</li>
+            <li>Pengaturan Kategori Hadiah bulk & dropdown di panggung.</li>
+            <li>Tombol merah arcade untuk memutar undian dengan algoritma <em>A-Res Weighted Sampling</em>.</li>
+            <li>Tampilan sesuai jumlah pemenang: $\le 3$ pemenang di slot machine, $4-10$ via amplop vintage Alfamidi, dan &gt;10 via tabel interaktif.</li>
+            <li>Ekspor laporan Excel.</li>
+          </ul>
+
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] text-amber-400 font-bold">Perintah Menjalankan:</span>
+              <button id="btn-copy-streamlit-cmd" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1 cursor-pointer">
+                Salin Perintah
+              </button>
+            </div>
+            <pre class="font-mono text-xs text-emerald-300 bg-black/60 p-2.5 rounded-lg overflow-x-auto">pip install -r requirements.txt
+streamlit run streamlit.py</pre>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-800">
+          <button id="btn-download-streamlit-py" class="px-4 py-2 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-md cursor-pointer transition-all">
+            Unduh streamlit.py
+          </button>
+          <button id="btn-bottom-close-streamlit-modal" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl cursor-pointer transition-colors">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN NATIVE JAVASCRIPT / TYPESCRIPT CONTROLLER -->
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
-

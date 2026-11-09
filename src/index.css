@@ -1,1 +1,43 @@
 @import "tailwindcss";
+
+@layer utilities {
+  /* Vintage Airmail Border */
+  .airmail-border {
+    background: repeating-linear-gradient(
+      135deg,
+      #d71920 0,
+      #d71920 18px,
+      transparent 18px,
+      transparent 24px,
+      #1e40af 24px,
+      #1e40af 42px,
+      transparent 42px,
+      transparent 48px
+    );
+  }
+
+  /* Postage Stamp Perforation */
+  .stamp-border {
+    clip-path: polygon(
+      0% 4%, 4% 0%, 8% 4%, 12% 0%, 16% 4%, 20% 0%, 24% 4%, 28% 0%, 32% 4%, 36% 0%, 
+      40% 4%, 44% 0%, 48% 4%, 52% 0%, 56% 4%, 60% 0%, 64% 4%, 68% 0%, 72% 4%, 76% 0%, 
+      80% 4%, 84% 0%, 88% 4%, 92% 0%, 96% 4%, 100% 0%, 100% 100%, 0% 100%
+    );
+  }
+
+  /* 3D Big Red Button Press */
+  .arcade-red-button {
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 50%, #991b1b 100%);
+    box-shadow: 0 8px 0 #7f1d1d, 0 14px 25px rgba(220, 38, 38, 0.6);
+    transition: all 0.1s ease;
+  }
+  .arcade-red-button:hover {
+    background: linear-gradient(180deg, #f87171 0%, #ef4444 50%, #b91c1c 100%);
+    box-shadow: 0 10px 0 #7f1d1d, 0 18px 30px rgba(239, 68, 68, 0.8);
+    transform: translateY(-2px);
+  }
+  .arcade-red-button:active, .arcade-red-button.is-pressed {
+    transform: translateY(6px);
+    box-shadow: 0 2px 0 #7f1d1d, 0 6px 12px rgba(220, 38, 38, 0.4);
+  }
+}
