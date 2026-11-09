@@ -114,8 +114,15 @@ ALFAMIDI_HTML = """
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
       <!-- Logo & Corporate Title -->
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg border border-red-400 flex-shrink-0">
-          A
+        <div id="brand-logo-container" class="relative flex items-center justify-center flex-shrink-0">
+          <img id="header-brand-logo" 
+               src="/assets/alfamidi-logo.svg" 
+               alt="Logo Alfamidi" 
+               class="h-9 sm:h-10 w-auto max-w-[130px] object-contain transition-all" 
+               onerror="this.classList.add('hidden'); document.getElementById('header-brand-badge').classList.remove('hidden');" />
+          <div id="header-brand-badge" class="hidden w-9 h-9 sm:w-10 sm:h-10 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg border border-red-400 flex-shrink-0" title="Badge Pengganti (Logo Error)">
+            A
+          </div>
         </div>
         <div>
           <div class="flex items-center gap-2">
@@ -163,6 +170,19 @@ ALFAMIDI_HTML = """
           <span class="hidden md:inline">Riwayat</span>
           <span id="history-badge-count" class="w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-black hidden items-center justify-center">0</span>
         </button>
+
+        <!-- Top Right Alfamidi Logo with Fallback Badge -->
+        <div id="top-right-logo-container" class="flex items-center pl-1 sm:pl-2 border-l border-slate-800" title="Logo Alfamidi (Bisa diubah di Pengaturan)">
+          <img id="top-right-logo-img" 
+               src="/assets/alfamidi-logo.svg" 
+               alt="Logo Alfamidi" 
+               class="h-8 sm:h-9 w-auto max-w-[120px] object-contain rounded-lg transition-transform hover:scale-105 cursor-pointer shadow-xs"
+               onerror="this.classList.add('hidden'); document.getElementById('top-right-logo-badge').classList.remove('hidden');" />
+          <div id="top-right-logo-badge" class="hidden h-8 sm:h-9 px-2.5 bg-red-600 rounded-xl flex items-center justify-center text-white font-black text-xs shadow-md border border-red-400 flex-shrink-0 gap-1.5 cursor-pointer" title="Badge Pengganti (Logo Error/Tidak Dapat Diakses)">
+            <span class="w-4 h-4 rounded bg-white text-red-600 flex items-center justify-center text-[10px] font-black">A</span>
+            <span class="text-[10px] font-extrabold tracking-wider text-white hidden sm:inline">ALFAMIDI</span>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -237,7 +257,7 @@ ALFAMIDI_HTML = """
             <div class="flex items-center justify-center gap-2">
               <span class="text-red-700 animate-spin text-sm">✦</span>
               <h2 id="marquee-event-title" class="text-base sm:text-xl md:text-2xl font-black tracking-wider uppercase font-serif drop-shadow-xs">
-                DOORPRIZE 20 TAHUN ALFAMIDI
+                SISTEM PENGUNDIAN KARYAWAN
               </h2>
               <span class="text-red-700 animate-spin text-sm">✦</span>
             </div>
@@ -381,7 +401,7 @@ ALFAMIDI_HTML = """
               <label for="input-event-title" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
                 Judul Acara / Header Undian
               </label>
-              <input id="input-event-title" type="text" value="DOORPRIZE 20 TAHUN ALFAMIDI" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500" />
+              <input id="input-event-title" type="text" value="SISTEM PENGUNDIAN KARYAWAN" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500 font-semibold" />
             </div>
 
             <!-- Bulk Kategori Hadiah -->
@@ -468,9 +488,39 @@ ALFAMIDI_HTML = """
           </div>
         </div>
 
+        <!-- Logo Perusahaan / Alfamidi Settings -->
+        <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+              <span>🖼️</span> Logo Perusahaan (Pojok Atas)
+            </span>
+            <span class="text-[10px] text-slate-400">Badge "A" aktif otomatis jika logo error / tidak dapat diakses</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-32 h-14 rounded-xl bg-slate-900 border border-slate-700 p-2 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-inner">
+              <img id="config-logo-preview" src="/assets/alfamidi-logo.svg" alt="Preview Logo" class="max-h-full max-w-full object-contain" />
+            </div>
+            <div class="flex-1 w-full space-y-2">
+              <input id="input-logo-url" type="text" placeholder="URL Gambar Logo (atau unggah berkas)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500 font-mono" />
+              <div class="flex flex-wrap items-center gap-2">
+                <label class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg cursor-pointer transition-colors border border-slate-700 flex items-center gap-1">
+                  <span>📁 Unggah File Logo</span>
+                  <input id="input-logo-file" type="file" accept="image/*" class="hidden" />
+                </label>
+                <button type="button" id="btn-reset-logo-default" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold rounded-lg border border-amber-500/40 transition-colors cursor-pointer">
+                  Gunakan Logo Alfamidi
+                </button>
+                <button type="button" id="btn-test-logo-error" class="px-3 py-1.5 bg-red-950/80 hover:bg-red-900 text-red-300 text-xs font-semibold rounded-lg border border-red-500/40 transition-colors cursor-pointer" title="Simulasi link logo error / tidak dapat diakses">
+                  Uji Badge Fallback
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-end pt-3 border-t border-slate-800">
           <button id="btn-save-to-stage" type="button" class="px-6 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer">
-            Simpan & Menuju Panggung Undian
+            <span id="btn-save-to-stage-text">Simpan & Menuju Panggung Undian</span>
           </button>
         </div>
       </div>
@@ -531,13 +581,29 @@ ALFAMIDI_HTML = """
             </div>
           </div>
 
-          <div id="panel-manual" class="data-subpanel hidden bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 space-y-3">
-            <textarea id="textarea-manual-data" rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-200">NIK,NAMA_KARYAWAN,JABATAN,CABANG,POIN_UNDIAN
+          <div id="panel-manual" class="data-subpanel hidden bg-slate-950/60 p-4 sm:p-5 rounded-xl border border-slate-800/80 space-y-3">
+            <div>
+              <label for="textarea-manual-data" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                Ketik atau Tempel Data Manual
+              </label>
+              <p class="text-[11px] text-slate-400 mb-2">
+                Format: koma (,) untuk memisahkan kolom, dan ENTER untuk baris baru. Baris 1 = Judul kolom.
+              </p>
+              <textarea id="textarea-manual-data" rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-red-500">NIK,NAMA_KARYAWAN,JABATAN,CABANG,POIN_UNDIAN
 MIDI-202401,Budi Santoso,Store Leader,Makassar,150
 MIDI-202402,Siti Nurhaliza,Cashier Staff,Bekasi,90
-MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
-            <div class="flex justify-end">
-              <button id="btn-apply-manual-data" type="button" class="px-5 py-2 bg-red-600 text-white text-xs font-bold rounded-xl">Terapkan Data</button>
+MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120
+MIDI-202404,Dewi Lestari,Assistant Store Leader,Medan,110
+MIDI-202405,Eko Wijaya,Store Crew,Manado,85</textarea>
+            </div>
+            <div class="flex items-center justify-between gap-2 pt-1">
+              <div id="manual-data-feedback" class="text-xs font-bold text-emerald-400 hidden flex items-center gap-1.5 bg-emerald-950/70 border border-emerald-600/50 px-3 py-1.5 rounded-lg">
+                <span>✓</span>
+                <span id="manual-data-feedback-text">Berhasil memuat 5 data manual!</span>
+              </div>
+              <button id="btn-apply-manual-data" type="button" class="ml-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5">
+                <span id="btn-apply-manual-text">Terapkan Data Manual</span>
+              </button>
             </div>
           </div>
 
@@ -583,7 +649,7 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
           </div>
 
           <div class="text-center mb-5">
-            <h2 id="letter-event-title" class="text-xl sm:text-2xl font-black text-red-700 uppercase font-serif">DOORPRIZE 20 TAHUN ALFAMIDI</h2>
+            <h2 id="letter-event-title" class="text-xl sm:text-2xl font-black text-red-700 uppercase font-serif">SISTEM PENGUNDIAN KARYAWAN</h2>
             <p id="letter-subtitle" class="text-xs text-slate-600 mt-1"></p>
           </div>
 
@@ -620,7 +686,7 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
 
               <div class="my-auto pl-4 py-2">
                 <div class="text-xs font-serif font-black text-red-800">TO : THE WINNER OF</div>
-                <div id="envelope-body-event-title" class="text-base sm:text-2xl font-serif font-black text-red-700 uppercase">DOORPRIZE 20 TAHUN ALFAMIDI</div>
+                <div id="envelope-body-event-title" class="text-base sm:text-2xl font-serif font-black text-red-700 uppercase">SISTEM PENGUNDIAN KARYAWAN</div>
                 <div id="envelope-body-subtitle" class="text-[10px] sm:text-xs font-semibold text-slate-600 uppercase mt-1">HADIAH UTAMA • PEMENANG RESMI</div>
               </div>
 
@@ -643,7 +709,7 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
       <div class="bg-gradient-to-r from-red-700 via-red-600 to-red-800 p-4 text-white flex items-center justify-between">
         <div>
           <span id="table-modal-winner-count-badge" class="text-xs font-bold text-amber-300">0 PEMENANG</span>
-          <h2 id="table-modal-event-title" class="text-lg font-black uppercase">DOORPRIZE 20 TAHUN ALFAMIDI</h2>
+          <h2 id="table-modal-event-title" class="text-lg font-black uppercase">SISTEM PENGUNDIAN KARYAWAN</h2>
           <p id="table-modal-category-name" class="text-xs text-red-100"></p>
         </div>
         <button id="btn-close-table-modal" class="p-2 text-white bg-white/10 rounded-full">✕</button>
@@ -789,9 +855,10 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
         winnerCount: 1,
         groupName: defaultCategories[0].name,
         displayColumns: ['NIK', 'JABATAN'],
-        eventTitle: 'DOORPRIZE 20 TAHUN ALFAMIDI',
+        eventTitle: 'SISTEM PENGUNDIAN KARYAWAN',
         allowDuplicateWinners: false,
         categories: defaultCategories,
+        logoUrl: '/assets/alfamidi-logo.svg',
       },
       wonIds: new Set(),
       drawHistory: [],
@@ -803,9 +870,9 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
       tableCurrentPage: 1,
       tablePageSize: 15,
       reelItems: [
+        { name: 'SISTEM', extra: 'SIAP UNDI' },
+        { name: 'UNDIAN', extra: 'SIAP UNDI' },
         { name: 'ALFAMIDI', extra: 'SIAP UNDI' },
-        { name: 'DOORPRIZE', extra: 'SIAP UNDI' },
-        { name: '20 TAHUN', extra: 'SIAP UNDI' },
       ],
     };
 
@@ -848,6 +915,10 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
         name: h,
         isNumeric: rows.slice(0, 50).every(r => typeof r[h] === 'number' || (!isNaN(Number(r[h])) && r[h] !== ''))
       }));
+      const foundName = headers.find(h => /nama|name/i.test(h)) || headers[0];
+      if (foundName) state.settings.nameColumn = foundName;
+      const otherCols = headers.filter(h => h !== state.settings.nameColumn).slice(0, 2);
+      if (otherCols.length > 0) state.settings.displayColumns = otherCols;
       updateUI();
     }
 
@@ -952,10 +1023,10 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
 
     function renderReels() {
       const container = $('slot-reels-grid');
-      const num = Math.min(3, Math.max(1, state.settings.winnerCount));
+      const isSlotWinner = Boolean(state.recentWinners && state.recentWinners.length > 0 && state.recentWinners.length <= 3 && !state.isSpinning);
+      const num = isSlotWinner ? state.recentWinners.length : 3;
       container.className = `grid gap-3 sm:gap-4 relative z-0 ${num === 1 ? 'grid-cols-1' : num === 2 ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'}`;
 
-      const isSlotWinner = state.recentWinners && state.recentWinners.length <= 3 && !state.isSpinning;
       container.innerHTML = '';
 
       for (let i = 0; i < num; i++) {
@@ -985,8 +1056,13 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
     }
 
     function renderConfig() {
-      $('input-event-title').value = state.settings.eventTitle;
+      if (document.activeElement !== $('input-event-title')) {
+        $('input-event-title').value = state.settings.eventTitle;
+      }
       $('marquee-event-title').textContent = state.settings.eventTitle;
+      $('envelope-body-event-title').textContent = state.settings.eventTitle;
+      $('letter-event-title').textContent = state.settings.eventTitle;
+      $('table-modal-event-title').textContent = state.settings.eventTitle;
       $('textarea-bulk-categories').value = state.settings.categories.map(c => `${c.name} | ${c.winnerCount}`).join('\\n');
       $('config-categories-count').textContent = `${state.settings.categories.length} Kategori Aktif`;
 
@@ -1216,7 +1292,15 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
       // Spin triggers
       $('btn-arcade-red-button').onclick = startSpin;
       $('btn-main-spin').onclick = startSpin;
-      $('btn-reset-draw').onclick = () => { state.recentWinners = null; renderReels(); };
+      $('btn-reset-draw').onclick = () => {
+        state.recentWinners = null;
+        state.reelItems = [
+          { name: 'SISTEM', extra: 'SIAP UNDI' },
+          { name: 'UNDIAN', extra: 'SIAP UNDI' },
+          { name: 'ALFAMIDI', extra: 'SIAP UNDI' },
+        ];
+        renderReels();
+      };
 
       // Category select
       $('stage-category-select').onchange = e => {
@@ -1323,7 +1407,133 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
         state.settings.winnerCount = state.settings.categories[0].winnerCount;
         updateUI();
       };
-      $('btn-save-to-stage').onclick = () => switchTab('stage');
+      // Event Title sync & persistence
+      const updateTitle = val => {
+        state.settings.eventTitle = val || 'SISTEM PENGUNDIAN KARYAWAN';
+        $('marquee-event-title').textContent = state.settings.eventTitle;
+        $('envelope-body-event-title').textContent = state.settings.eventTitle;
+        $('letter-event-title').textContent = state.settings.eventTitle;
+        $('table-modal-event-title').textContent = state.settings.eventTitle;
+      };
+      $('input-event-title').oninput = e => updateTitle(e.target.value);
+      $('input-event-title').onchange = e => updateTitle(e.target.value);
+
+      $('btn-save-to-stage').onclick = () => {
+        const val = $('input-event-title').value.trim();
+        updateTitle(val);
+        const saveText = $('btn-save-to-stage-text');
+        if (saveText) saveText.textContent = '✓ Pengaturan Tersimpan!';
+        setTimeout(() => {
+          if (saveText) saveText.textContent = 'Simpan & Menuju Panggung Undian';
+          switchTab('stage');
+        }, 350);
+      };
+
+      // Logo Handler
+      function applyLogo(url) {
+        const finalUrl = url ? url.trim() : '/assets/alfamidi-logo.svg';
+        state.settings.logoUrl = finalUrl;
+
+        const bind = (imgId, badgeId) => {
+          const img = $(imgId);
+          const badge = $(badgeId);
+          if (!img || !badge) return;
+          img.classList.remove('hidden');
+          badge.classList.add('hidden');
+          img.onerror = () => {
+            img.classList.add('hidden');
+            badge.classList.remove('hidden');
+          };
+          img.src = finalUrl;
+        };
+
+        bind('header-brand-logo', 'header-brand-badge');
+        bind('top-right-logo-img', 'top-right-logo-badge');
+
+        const preview = $('config-logo-preview');
+        if (preview) {
+          preview.onerror = () => { preview.src = ''; };
+          preview.src = finalUrl;
+        }
+
+        const inputUrl = $('input-logo-url');
+        if (inputUrl && inputUrl.value !== finalUrl) inputUrl.value = finalUrl;
+      }
+
+      applyLogo('/assets/alfamidi-logo.svg');
+
+      $('input-logo-url').oninput = e => applyLogo(e.target.value);
+      $('input-logo-file').onchange = e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const dataUrl = ev.target?.result;
+          if (dataUrl) applyLogo(dataUrl);
+        };
+        reader.readAsDataURL(file);
+      };
+      $('btn-reset-logo-default').onclick = () => applyLogo('/assets/alfamidi-logo.svg');
+      $('btn-test-logo-error').onclick = () => applyLogo('https://gambar-logo-tidak-ditemukan-404.test/error.png');
+      $('top-right-logo-container').onclick = () => switchTab('config');
+
+      // Manual Data Apply
+      $('btn-apply-manual-data').onclick = () => {
+        const btn = $('btn-apply-manual-data');
+        btn.classList.add('scale-95');
+        setTimeout(() => btn.classList.remove('scale-95'), 150);
+
+        const txt = $('textarea-manual-data').value.trim();
+        if (!txt) {
+          alert('Silakan ketik atau tempel data terlebih dahulu.');
+          return;
+        }
+
+        const lines = txt.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length < 2) {
+          alert('Data harus memiliki minimal 1 baris judul kolom dan 1 baris peserta.');
+          return;
+        }
+
+        const headers = lines[0].split(',').map((h, i) => h.trim() || `Kolom_${i+1}`);
+        const rows = [];
+        for (let i = 1; i < lines.length; i++) {
+          const vals = lines[i].split(',').map(v => v.trim());
+          if (vals.every(v => v === '')) continue;
+          const r = { _id: `manual-${i}` };
+          headers.forEach((h, idx) => {
+            const v = vals[idx] !== undefined ? vals[idx] : '';
+            const num = Number(v);
+            r[h] = (!isNaN(num) && v !== '') ? num : v;
+          });
+          rows.push(r);
+        }
+
+        state.wonIds.clear();
+        state.recentWinners = null;
+        applyData(headers, rows);
+
+        const msg = `Berhasil memuat ${rows.length} data manual!`;
+        const alertEl = $('data-import-alert');
+        alertEl.className = 'p-3 rounded-xl text-xs bg-emerald-950 border border-emerald-700 text-emerald-200 font-semibold';
+        alertEl.textContent = `✓ ${msg}`;
+        alertEl.classList.remove('hidden');
+
+        const feedback = $('manual-data-feedback');
+        const feedbackText = $('manual-data-feedback-text');
+        if (feedback && feedbackText) {
+          feedbackText.textContent = msg;
+          feedback.classList.remove('hidden');
+        }
+
+        const btnText = $('btn-apply-manual-text');
+        if (btnText) btnText.textContent = `✓ Berhasil Memuat ${rows.length} Data!`;
+        btn.classList.add('bg-emerald-600');
+        setTimeout(() => {
+          if (btnText) btnText.textContent = 'Terapkan Data Manual';
+          btn.classList.remove('bg-emerald-600');
+        }, 2500);
+      };
 
       // Subtabs
       document.querySelectorAll('.subtab-btn').forEach(btn => {
@@ -1334,6 +1544,62 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
           $(btn.getAttribute('data-target')).classList.remove('hidden');
         };
       });
+
+      // CSV upload
+      $('input-file-csv').onchange = async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const txt = await file.text();
+        const lines = txt.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length > 1) {
+          const headers = lines[0].split(',').map((h, i) => h.trim() || `Kolom_${i+1}`);
+          const rows = [];
+          for (let i = 1; i < lines.length; i++) {
+            const vals = lines[i].split(',').map(v => v.trim());
+            const r = { _id: `csv-${i}` };
+            headers.forEach((h, idx) => { r[h] = vals[idx] ?? ''; });
+            rows.push(r);
+          }
+          applyData(headers, rows);
+          $('data-import-alert').className = 'p-3 rounded-xl text-xs bg-emerald-950 border border-emerald-700 text-emerald-200';
+          $('data-import-alert').textContent = `Berhasil memuat ${rows.length} entri CSV!`;
+          $('data-import-alert').classList.remove('hidden');
+        }
+      };
+
+      // GSheet Fetch
+      $('btn-fetch-gsheet').onclick = async () => {
+        const url = $('input-gsheet-url').value.trim();
+        if (!url) { alert('Masukkan link Google Spreadsheet'); return; }
+        try {
+          $('btn-fetch-gsheet').textContent = 'Mengambil...';
+          const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+          if (!match) throw new Error('Format link Google Spreadsheet tidak valid.');
+          const csvUrl = `https://docs.google.com/spreadsheets/d/${match[1]}/export?format=csv`;
+          const res = await fetch(csvUrl);
+          if (!res.ok) throw new Error('Gagal menarik data. Pastikan spreadsheet disetel publik.');
+          const txt = await res.text();
+          const lines = txt.split(/\r?\n/).filter(l => l.trim().length > 0);
+          if (lines.length > 1) {
+            const headers = lines[0].split(',').map((h, i) => h.trim() || `Kolom_${i+1}`);
+            const rows = [];
+            for (let i = 1; i < lines.length; i++) {
+              const vals = lines[i].split(',').map(v => v.trim());
+              const r = { _id: `gsheet-${i}` };
+              headers.forEach((h, idx) => { r[h] = vals[idx] ?? ''; });
+              rows.push(r);
+            }
+            applyData(headers, rows);
+            $('data-import-alert').className = 'p-3 rounded-xl text-xs bg-emerald-950 border border-emerald-700 text-emerald-200';
+            $('data-import-alert').textContent = `Berhasil memuat ${rows.length} data Google Spreadsheet!`;
+            $('data-import-alert').classList.remove('hidden');
+          }
+        } catch (err) {
+          alert(err.message || 'Gagal memuat Google Spreadsheet.');
+        } finally {
+          $('btn-fetch-gsheet').textContent = 'Tarik Data';
+        }
+      };
 
       // Excel upload
       $('input-file-excel').onchange = async e => {

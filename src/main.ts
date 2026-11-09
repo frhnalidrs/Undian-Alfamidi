@@ -70,6 +70,12 @@ function loadInitialSettings(): DrawSettings {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed && Array.isArray(parsed.categories) && parsed.categories.length > 0) {
+        if (!parsed.eventTitle || parsed.eventTitle === 'DOORPRIZE 18 TAHUN ALFAMIDI' || parsed.eventTitle === 'DOORPRIZE 20 TAHUN ALFAMIDI') {
+          parsed.eventTitle = 'SISTEM PENGUNDIAN KARYAWAN';
+        }
+        if (!parsed.logoUrl) {
+          parsed.logoUrl = '/assets/alfamidi-logo.svg';
+        }
         return parsed;
       }
     }
@@ -83,9 +89,10 @@ function loadInitialSettings(): DrawSettings {
     winnerCount: 1,
     groupName: defaultCategories[0].name,
     displayColumns: ['NIK', 'JABATAN'],
-    eventTitle: 'DOORPRIZE 20 TAHUN ALFAMIDI',
+    eventTitle: 'SISTEM PENGUNDIAN KARYAWAN',
     allowDuplicateWinners: false,
     categories: defaultCategories,
+    logoUrl: '/assets/alfamidi-logo.svg',
   };
 }
 
@@ -114,9 +121,9 @@ const state: AppState = {
   tableCurrentPage: 1,
   tablePageSize: 15,
   reelItems: [
+    { name: 'SISTEM', extra: 'SIAP UNDI' },
+    { name: 'UNDIAN', extra: 'SIAP UNDI' },
     { name: 'ALFAMIDI', extra: 'SIAP UNDI' },
-    { name: 'DOORPRIZE', extra: 'SIAP UNDI' },
-    { name: '18 TAHUN', extra: 'SIAP UNDI' },
   ],
 };
 
@@ -224,17 +231,18 @@ function updateQuickInfoStrip(): void {
 
 function renderStageReels(): void {
   const container = $('slot-reels-grid');
-  const numReels = Math.min(3, Math.max(1, state.settings.winnerCount));
+  const isSlotWinner = Boolean(
+    state.recentWinners &&
+    state.recentWinners.length > 0 &&
+    state.recentWinners.length <= 3 &&
+    !state.isSpinning
+  );
+
+  const numReels = isSlotWinner ? state.recentWinners!.length : 3;
 
   container.className = `grid gap-3 sm:gap-4 relative z-0 ${
     numReels === 1 ? 'grid-cols-1' : numReels === 2 ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'
   }`;
-
-  const isSlotWinner =
-    state.recentWinners &&
-    state.recentWinners.length > 0 &&
-    state.recentWinners.length <= 3 &&
-    !state.isSpinning;
 
   container.innerHTML = '';
 
@@ -298,12 +306,55 @@ function renderStageCategoriesDropdown(): void {
   $<HTMLInputElement>('stage-winner-count-input').value = String(state.settings.winnerCount);
 }
 
+function applyLogo(url: string | null): void {
+  const finalUrl = url ? url.trim() : '/assets/alfamidi-logo.svg';
+  state.settings.logoUrl = finalUrl;
+  saveSettings();
+
+  const bind = (imgId: string, badgeId: string) => {
+    const img = document.getElementById(imgId) as HTMLImageElement | null;
+    const badge = document.getElementById(badgeId);
+    if (!img || !badge) return;
+
+    img.classList.remove('hidden');
+    badge.classList.add('hidden');
+
+    img.onerror = () => {
+      img.classList.add('hidden');
+      badge.classList.remove('hidden');
+    };
+    img.src = finalUrl;
+  };
+
+  bind('header-brand-logo', 'header-brand-badge');
+  bind('top-right-logo-img', 'top-right-logo-badge');
+
+  const preview = document.getElementById('config-logo-preview') as HTMLImageElement | null;
+  if (preview) {
+    preview.onerror = () => {
+      preview.src = '';
+      preview.alt = 'Logo error (Badge fallback aktif)';
+    };
+    preview.src = finalUrl;
+  }
+
+  const inputUrl = document.getElementById('input-logo-url') as HTMLInputElement | null;
+  if (inputUrl && inputUrl.value !== finalUrl) {
+    inputUrl.value = finalUrl;
+  }
+}
+
 function renderConfigPanel(): void {
   $<HTMLInputElement>('input-event-title').value = state.settings.eventTitle;
   $('marquee-event-title').textContent = state.settings.eventTitle;
   $('envelope-body-event-title').textContent = state.settings.eventTitle;
   $('letter-event-title').textContent = state.settings.eventTitle;
   $('table-modal-event-title').textContent = state.settings.eventTitle;
+
+  const inputLogo = document.getElementById('input-logo-url') as HTMLInputElement | null;
+  if (inputLogo) inputLogo.value = state.settings.logoUrl || '/assets/alfamidi-logo.svg';
+  const logoPreview = document.getElementById('config-logo-preview') as HTMLImageElement | null;
+  if (logoPreview) logoPreview.src = state.settings.logoUrl || '/assets/alfamidi-logo.svg';
 
   // Bulk textarea
   const lines = state.settings.categories.map(c => `${c.name} | ${c.winnerCount}`).join('\n');
@@ -875,6 +926,11 @@ function setupEventListeners(): void {
   // Undi Ulang Button
   $('btn-reset-draw').addEventListener('click', () => {
     state.recentWinners = null;
+    state.reelItems = [
+      { name: 'SISTEM', extra: 'SIAP UNDI' },
+      { name: 'UNDIAN', extra: 'SIAP UNDI' },
+      { name: 'ALFAMIDI', extra: 'SIAP UNDI' },
+    ];
     renderStageReels();
   });
 
@@ -1028,11 +1084,18 @@ function setupEventListeners(): void {
   });
 
   // CONFIG PANEL LISTENERS
-  $('input-event-title').addEventListener('input', (e) => {
-    state.settings.eventTitle = (e.target as HTMLInputElement).value;
+  const onTitleChanged = () => {
+    const val = $<HTMLInputElement>('input-event-title').value.trim();
+    state.settings.eventTitle = val || 'SISTEM PENGUNDIAN KARYAWAN';
+    $('marquee-event-title').textContent = state.settings.eventTitle;
+    $('envelope-body-event-title').textContent = state.settings.eventTitle;
+    $('letter-event-title').textContent = state.settings.eventTitle;
+    $('table-modal-event-title').textContent = state.settings.eventTitle;
     saveSettings();
     updateQuickInfoStrip();
-  });
+  };
+  $('input-event-title').addEventListener('input', onTitleChanged);
+  $('input-event-title').addEventListener('change', onTitleChanged);
 
   // Bulk Categories Apply
   $('btn-apply-bulk-categories').addEventListener('click', () => {
@@ -1156,7 +1219,65 @@ function setupEventListeners(): void {
     updateQuickInfoStrip();
   });
 
-  $('btn-save-to-stage').addEventListener('click', () => switchTab('stage'));
+  $('btn-save-to-stage').addEventListener('click', () => {
+    const titleVal = $<HTMLInputElement>('input-event-title').value.trim();
+    if (titleVal) {
+      state.settings.eventTitle = titleVal;
+    }
+    $('marquee-event-title').textContent = state.settings.eventTitle;
+    $('envelope-body-event-title').textContent = state.settings.eventTitle;
+    $('letter-event-title').textContent = state.settings.eventTitle;
+    $('table-modal-event-title').textContent = state.settings.eventTitle;
+    saveSettings();
+
+    const saveText = document.getElementById('btn-save-to-stage-text');
+    if (saveText) saveText.textContent = '✓ Pengaturan Tersimpan!';
+    setTimeout(() => {
+      if (saveText) saveText.textContent = 'Simpan & Menuju Panggung Undian';
+      switchTab('stage');
+    }, 400);
+  });
+
+  // Logo settings listeners
+  const inputLogoUrl = document.getElementById('input-logo-url') as HTMLInputElement | null;
+  if (inputLogoUrl) {
+    inputLogoUrl.addEventListener('input', (e) => {
+      applyLogo((e.target as HTMLInputElement).value);
+    });
+  }
+
+  const inputLogoFile = document.getElementById('input-logo-file') as HTMLInputElement | null;
+  if (inputLogoFile) {
+    inputLogoFile.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const dataUrl = ev.target?.result as string;
+        if (dataUrl) applyLogo(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const btnResetLogo = document.getElementById('btn-reset-logo-default');
+  if (btnResetLogo) {
+    btnResetLogo.addEventListener('click', () => {
+      applyLogo('/assets/alfamidi-logo.svg');
+    });
+  }
+
+  const btnTestLogo = document.getElementById('btn-test-logo-error');
+  if (btnTestLogo) {
+    btnTestLogo.addEventListener('click', () => {
+      applyLogo('https://gambar-logo-tidak-ditemukan-404.test/error.png');
+    });
+  }
+
+  const topRightLogo = document.getElementById('top-right-logo-container');
+  if (topRightLogo) {
+    topRightLogo.addEventListener('click', () => switchTab('config'));
+  }
 
   // DATA IMPORT SUB-TABS
   document.querySelectorAll('.subtab-btn').forEach(btn => {
@@ -1230,11 +1351,48 @@ function setupEventListeners(): void {
 
   // Manual Data Apply
   $('btn-apply-manual-data').addEventListener('click', () => {
+    const btn = $<HTMLButtonElement>('btn-apply-manual-data');
+    btn.classList.add('scale-95');
+    setTimeout(() => btn.classList.remove('scale-95'), 150);
+
     const txt = $<HTMLTextAreaElement>('textarea-manual-data').value.trim();
+    if (!txt) {
+      showDataAlert('Silakan ketik atau tempel data terlebih dahulu.', 'error');
+      return;
+    }
+
     try {
       const { headers, rows } = parseCSV(txt);
+      if (rows.length === 0) {
+        showDataAlert('Format teks manual tidak menghasilkan baris data.', 'error');
+        return;
+      }
+
+      // Reset previous won IDs for fresh manual data
+      state.wonIds.clear();
+      state.recentWinners = null;
+
       applyImportedRows(headers, rows);
-      showDataAlert(`Berhasil memuat ${rows.length} data manual!`, 'success');
+
+      const msg = `Berhasil memuat ${rows.length} data manual!`;
+      showDataAlert(msg, 'success');
+
+      // Inline feedback element
+      const feedbackEl = document.getElementById('manual-data-feedback');
+      const feedbackText = document.getElementById('manual-data-feedback-text');
+      if (feedbackEl && feedbackText) {
+        feedbackText.textContent = msg;
+        feedbackEl.classList.remove('hidden');
+      }
+
+      const btnText = document.getElementById('btn-apply-manual-text');
+      if (btnText) btnText.textContent = `✓ Berhasil Memuat ${rows.length} Data!`;
+      btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+
+      setTimeout(() => {
+        if (btnText) btnText.textContent = 'Terapkan Data Manual';
+        btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+      }, 2500);
     } catch (err: unknown) {
       showDataAlert((err as Error)?.message || 'Format teks manual tidak valid.', 'error');
     }
@@ -1269,6 +1427,9 @@ function applyImportedRows(headers: string[], rows: Record<string, string | numb
 // APP BOOTSTRAP
 // =============================================================================
 function initApp(): void {
+  // Apply company logo
+  applyLogo(state.settings.logoUrl || '/assets/alfamidi-logo.svg');
+
   // Load 1,000 initial sample Alfamidi employees
   const { headers, rows } = generateSampleAlfamidiData(1000);
   applyImportedRows(headers, rows);

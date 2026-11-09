@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" width="280" height="80">
+  <defs>
+    <linearGradient id="midiRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef232b" />
+      <stop offset="100%" stop-color="#b80f15" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  
+  <!-- Outer Pill Background for High Contrast on Dark/Light -->
+  <rect x="2" y="6" width="276" height="68" rx="14" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1.5"/>
+  
+  <!-- Red Brand Badge "A" on the left -->
+  <rect x="12" y="14" width="52" height="52" rx="10" fill="url(#midiRed)" />
+  <path d="M 38 23 L 49 55 L 43 55 L 40.5 47 L 35.5 47 L 33 55 L 27 55 Z M 38 31 L 36.5 42.5 L 39.5 42.5 Z" fill="#ffffff" font-weight="900" />
+  
+  <!-- Text "Alfamidi" -->
+  <text x="74" y="47" font-family="'Plus Jakarta Sans', 'Arial Black', sans-serif" font-weight="900" font-size="34" fill="#d71920" letter-spacing="-1">
+    Alfa<tspan fill="#005bac">midi</tspan>
+  </text>
+  
+  <!-- Sub-caption -->
+  <text x="75" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#64748b" letter-spacing="1.2">
+    PT MIDI UTAMA INDONESIA TBK
+  </text>
+</svg>

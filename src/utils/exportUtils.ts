@@ -109,7 +109,7 @@ export function exportWinnersToPDF(
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.setTextColor(51, 65, 85);
-  doc.text(`Acara / Event  : ${eventTitle || 'DOORPRIZE 18 TAHUN ALFAMIDI'}`, 14, 49);
+  doc.text(`Acara / Event  : ${eventTitle || 'SISTEM PENGUNDIAN KARYAWAN'}`, 14, 49);
   doc.text(`Kategori Undian: ${groupName || 'Hadiah Utama'}`, 14, 55);
   doc.text(`Jumlah Pemenang: ${winners.length} Orang`, 14, 61);
   doc.text(`Waktu Penarikan: ${new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'medium' })} WIB`, 14, 67);

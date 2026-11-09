@@ -26,6 +26,7 @@ export interface DrawSettings {
   eventTitle: string;
   allowDuplicateWinners: boolean;
   categories: PrizeCategory[];
+  logoUrl?: string;
 }
 
 export interface WinnerItem {
