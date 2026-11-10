@@ -21,7 +21,7 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode('utf-8')
     return ""
   
-logo_b64 = get_base64_image("assets/image/logo.png")
+logo_b64 = get_base64_image("assets/images/logo.png")
   
 # 1. Konfigurasi Halaman Streamlit
 st.set_page_config(
