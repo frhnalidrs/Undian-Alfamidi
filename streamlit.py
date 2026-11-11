@@ -30,6 +30,7 @@ def get_base64_image(relative_path):
 logo_b64 = get_base64_image("assets/image/logo.png")
 logo_panjang_b64 = get_base64_image("assets/image/Alfamidi_2015.svg")
 bg_b64 = get_base64_image("assets/image/bg.png")
+
 # 1. Konfigurasi Halaman Streamlit
 st.set_page_config(
     page_title="Alfamidi Lucky Draw - Sistem Undian Karyawan",
