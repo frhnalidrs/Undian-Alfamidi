@@ -14,17 +14,22 @@ import streamlit as st
 import streamlit.components.v1 as components
 import json
 
-# Fungsi pengubah gambar ke Base64
-def get_base64_image(image_path):
-    if os.path.exists(image_path):
-        with open(image_path, "rb") as img_file:
+# Ambil direktori absolut dari lokasi streamlit.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def get_base64_image(relative_path):
+    # Gabungkan path absolut dengan relative path
+    full_path = os.path.join(BASE_DIR, relative_path)
+    if os.path.exists(full_path):
+        with open(full_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode('utf-8')
+    # Tampilkan peringatan di Streamlit Cloud jika file gagal dibaca
+    st.warning(f"⚠️ File gambar tidak ditemukan di path: {full_path}")
     return ""
 
 logo_b64 = get_base64_image("assets/image/logo.png")
 logo_panjang_b64 = get_base64_image("assets/image/Alfamidi_2015.svg")
 bg_b64 = get_base64_image("assets/image/bg.png")
-
 # 1. Konfigurasi Halaman Streamlit
 st.set_page_config(
     page_title="Alfamidi Lucky Draw - Sistem Undian Karyawan",
