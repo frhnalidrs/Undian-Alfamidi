@@ -1829,16 +1829,21 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
         // Fungsi untuk sinkronisasi tinggi iframe ke Streamlit secara nyata
         function updateStreamlitFrameHeight() {
             setTimeout(() => {
-                const bodyHeight = document.body.scrollHeight;
-                const viewportHeight = window.innerHeight;
-                // Ambil nilai tertinggi antara isi konten dan tinggi viewport browser
-                const targetHeight = Math.max(bodyHeight, viewportHeight);
+                const body = document.body;
+                const html = document.documentElement;
+                
+                // Hitung tinggi bersih konten tanpa menyertakan scrollbar phantom
+                const targetHeight = Math.max(
+                    body.scrollHeight, 
+                    body.offsetHeight, 
+                    html.scrollHeight
+                );
                 
                 window.parent.postMessage({
                     type: 'streamlit:setFrameHeight',
-                    height: targetHeight
+                    height: targetHeight + 20 // Tambah buffer 20px agar tidak mepet
                 }, '*');
-            }, 100);
+            }, 150);
         }
 
         // Jalankan pemantauan resize
@@ -1855,4 +1860,4 @@ MIDI-202403,Ahmad Pratama,Store Crew,Tangerang,120</textarea>
 ALFAMIDI_HTML_FINAL = ALFAMIDI_HTML.replace("%%LOGO_B64%%", logo_b64).replace("%%LOGO_PANJANG%%", logo_panjang_b64).replace("%%BG_B64%%", bg_b64)
 
 # Render aplikasi langsung di Streamlit
-components.html(ALFAMIDI_HTML_FINAL, height=1250, scrolling=True)
+components.html(ALFAMIDI_HTML_FINAL, height=1250, scrolling=False)
