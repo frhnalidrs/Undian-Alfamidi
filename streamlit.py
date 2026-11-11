@@ -27,9 +27,9 @@ def get_base64_image(relative_path):
     st.warning(f"⚠️ File gambar tidak ditemukan di path: {full_path}")
     return ""
 
-logo_b64 = get_base64_image("assets/image/logo.png")
-logo_panjang_b64 = get_base64_image("assets/image/Alfamidi_2015.svg")
-bg_b64 = get_base64_image("assets/image/bg.png")
+logo_b64 = get_base64_image("assets/images/logo.png")
+logo_panjang_b64 = get_base64_image("assets/images/Alfamidi_2015.svg")
+bg_b64 = get_base64_image("assets/images/bg.png")
 
 # 1. Konfigurasi Halaman Streamlit
 st.set_page_config(
